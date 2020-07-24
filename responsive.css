@@ -12,7 +12,7 @@
   }
   
   .menu {
-    display:block;
+    display:block !important;
   }
   
   .container h1 {

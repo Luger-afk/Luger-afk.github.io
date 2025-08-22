@@ -19,6 +19,7 @@ namespace DiscordSeManager
             InitializeComponent();
             txtToken.Text = _config.Get("Discord", "BotToken", "");
             txtChannel.Text = _config.Get("Discord", "ChannelId", "");
+            txtMessage.Text = _config.Get("Discord", "LastMessageID", "");
             txtOutput.Text = _config.Get("Output", "RootFolder", "");
         }
 
@@ -26,6 +27,7 @@ namespace DiscordSeManager
         {
             _config.Set("Discord", "BotToken", txtToken.Text.Trim());
             _config.Set("Discord", "ChannelId", txtChannel.Text.Trim());
+            _config.Set("Discord", "LastMessageId", txtMessage.Text.Trim());
             _config.Set("Output", "RootFolder", txtOutput.Text.Trim());
             DialogResult = DialogResult.OK;
         }

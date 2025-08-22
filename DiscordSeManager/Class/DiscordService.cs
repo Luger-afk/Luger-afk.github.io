@@ -94,6 +94,8 @@ namespace DiscordSeManager
                     var safeName = $"{att.Title}{ext}"; // ファイル名主キー。重複はDB側でスキップ
                     var localPath = Path.Combine(_downloadDir, safeName);
 
+                    trigger = string.IsNullOrEmpty(trigger) ? att.Title : trigger;
+
                     // 既に存在 → 以降の処理（DB UpsertはDO NOTHING）
                     try
                     {

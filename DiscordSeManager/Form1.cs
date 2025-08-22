@@ -42,7 +42,7 @@ namespace DiscordSeManager
             var colPlay = new DataGridViewButtonColumn { HeaderText = "再生/停止", Text = "▶", UseColumnTextForButtonValue = true, Width = 80 };
             dataGridView1.Columns.Add(colPlay);
 
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "優先度", DataPropertyName = nameof(SeItem.Priority), Width = 60 });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "優先度", DataPropertyName = nameof(SeItem.Priority), Width = 70 });
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "対応文字列", DataPropertyName = nameof(SeItem.Trigger), Width = 140 });
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "ファイル名", DataPropertyName = nameof(SeItem.FileName), Width = 200, ReadOnly = true });
 
@@ -110,7 +110,7 @@ namespace DiscordSeManager
                 await _discord.LoginAsync(token);
 
                 ulong? lastId = null;
-                var last = _repo.GetMeta("LastFetchedMessageId");
+                var last = _config.Get("Discord", "LastMessageID") ?? string.Empty;
                 if (ulong.TryParse(last, out var lid)) lastId = lid;
 
                 var items = await _discord.FetchNewSeAsync(channelId, lastId);
@@ -121,7 +121,7 @@ namespace DiscordSeManager
                 if (items.Count > 0)
                 {
                     var maxId = items.Max(i => i.MessageId);
-                    _repo.SetMeta("LastFetchedMessageId", maxId.ToString());
+                    _config.Set("Discord", "LastMessageID", maxId.ToString());
                 }
 
                 LoadGrid();

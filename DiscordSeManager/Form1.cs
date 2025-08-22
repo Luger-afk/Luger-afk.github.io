@@ -122,6 +122,7 @@ namespace DiscordSeManager
                 {
                     var maxId = items.Max(i => i.MessageId);
                     _config.Set("Discord", "LastMessageID", maxId.ToString());
+                    _config.Save();
                 }
 
                 LoadGrid();

@@ -91,7 +91,10 @@ namespace DiscordSeManager
                     if (att.Size > 50 * 1024 * 1024) // 50MB超はスキップ（要件: 制限に引っかかる場合はダウンロードしない）
                         continue;
 
-                    var safeName = $"{att.Title}{ext}"; // ファイル名主キー。重複はDB側でスキップ
+                    var fileName = att.Title;
+                    fileName = string.IsNullOrEmpty(fileName) ? trigger : fileName;
+                    fileName = string.IsNullOrEmpty(fileName) ? new Random().Next().ToString() : fileName;
+                    var safeName = $"{fileName}{ext}"; // ファイル名主キー。重複はDB側でスキップ
                     var localPath = Path.Combine(_downloadDir, safeName);
 
                     trigger = string.IsNullOrEmpty(trigger) ? att.Title : trigger;
@@ -118,7 +121,7 @@ namespace DiscordSeManager
                         FileName = safeName,
                         MessageId = msg.Id,
                         FilePath = localPath,
-                        Trigger = trigger,
+                        Trigger = trigger ?? string.Empty,
                         VolumePercent = volume,
                         Priority = priority,
                         IsEnglish = isEng,

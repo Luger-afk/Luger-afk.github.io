@@ -75,12 +75,14 @@ namespace DiscordSeManager
                 // 投稿本文から トリガー文字列 と 音量% を拾う簡易パーサ（例: trigger:XXX volume:80 priority:10 english:Y）
                 // 指定がない／範囲外はデフォルト適用
                 var trigger = ParseTag(msg.Content, "trigger") ?? string.Empty;
+                trigger = trigger.ToUpperInvariant().Normalize(System.Text.NormalizationForm.FormKC);
                 var vol = ParseInt(msg.Content, "volume");
                 int volume = (vol >= 1 && vol <= 100) ? vol.Value : 50;
                 var pri = ParseInt(msg.Content, "priority");
                 int priority = (pri >= 1 && pri <= 99) ? pri.Value : 50;
                 var eng = ParseTag(msg.Content, "english");
                 bool isEng = (eng?.Equals("y", StringComparison.OrdinalIgnoreCase) ?? false);
+                int cnt = 0;
 
                 foreach (var att in msg.Attachments)
                 {
@@ -91,9 +93,9 @@ namespace DiscordSeManager
                     if (att.Size > 50 * 1024 * 1024) // 50MB超はスキップ（要件: 制限に引っかかる場合はダウンロードしない）
                         continue;
 
-                    var fileName = att.Title;
-                    fileName = string.IsNullOrEmpty(fileName) ? trigger : fileName;
-                    fileName = string.IsNullOrEmpty(fileName) ? new Random().Next().ToString() : fileName;
+                    var fileName = string.IsNullOrEmpty(trigger) ? att.Title : trigger ;
+                    fileName = string.IsNullOrEmpty(fileName) ? $"{att.Id}_{cnt}" : fileName;
+                    cnt++;
                     var safeName = $"{fileName}{ext}"; // ファイル名主キー。重複はDB側でスキップ
                     var localPath = Path.Combine(_downloadDir, safeName);
 

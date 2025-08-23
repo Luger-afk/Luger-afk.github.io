@@ -165,8 +165,7 @@ namespace DiscordSeManager
                 foreach (var it in selected)
                 {
                     // 音量焼き込み出力
-                    var baseName = Path.GetFileNameWithoutExtension(it.FileName);
-                    var dstNoExt = Path.Combine(soundDir, baseName);
+                    var dstNoExt = Path.Combine(soundDir, it.Trigger);
                     var written = _audio.RenderWithVolume(it.FilePath, it.VolumePercent, dstNoExt);
                     // 出力ファイル名は元ファイル名のベース名を使用（拡張子は.wavに統一）
                 }
@@ -177,10 +176,9 @@ namespace DiscordSeManager
                 {
                     foreach (var it in selected)
                     {
-                        var baseName = Path.GetFileNameWithoutExtension(it.FileName) + ".wav"; // 出力拡張子に合わせる
                         var yn = it.IsEnglish ? "Y" : "N";
                         // [優先度]\t[対応文字列]\t[ファイル名]\t[Y/N]
-                        sw.WriteLine($"{it.Priority}\t{yn}\t{it.Trigger}\t(Sound {baseName})");
+                        sw.WriteLine($"{it.Priority}\t{yn}\t{it.Trigger}\t(Sound {it.Trigger}.wav)");
                     }
                 }
 
